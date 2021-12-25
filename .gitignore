@@ -1,0 +1,10 @@
+# ignore files/folders
+
+#files
+*.sln
+*.vs
+
+#folders
+
+**/bin
+**/bin-int
