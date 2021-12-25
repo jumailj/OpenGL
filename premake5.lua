@@ -12,9 +12,16 @@ workspace "OpenGL"
 
 		files{ "%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-		targetdir ("bin/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}")
+		includedirs {"%{prj.name}/vendor/GLFW/include", "%{prj.name}/vendor/GLEW/include"} --include glfw, glew
+		defines {"GLEW_STATIC"}
+		libdirs{"%{prj.name}/vendor/GLFW/lib", "%{prj.name}/vendor/GLEW/lib"} --include additional lib dependencies
+		links {"opengl32.lib", "glfw3.lib", "glew32s.lib"} --inclding
+
+
+		targetdir ("bin/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}") 
 		objdir ("bin-int/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}")
 
+		
 
 		filter {"configurations:Debug"}
 			defines {"DEBUG"}
