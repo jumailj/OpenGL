@@ -20,8 +20,6 @@ workspace "OpenGL"
 		targetdir ("bin/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}") 
 		objdir ("bin-int/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}")
 
-		
-
 		filter {"configurations:Debug"}
 			defines {"DEBUG"}
 			symbols "On"
@@ -29,3 +27,4 @@ workspace "OpenGL"
 		filter{"configurations:Release"}
 			defines{"NDEBUG"}
 			optimize "On"
+
