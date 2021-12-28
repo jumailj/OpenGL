@@ -50,6 +50,7 @@ extern "C" {
 struct gladGLversionStruct {
     int major;
     int minor;
+
 };
 
 typedef void* (* GLADloadproc)(const char *name);

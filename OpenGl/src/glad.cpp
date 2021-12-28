@@ -18,7 +18,6 @@
     Online:
         https://glad.dav1d.de/#profile=compatibility&language=c&specification=gl&loader=on&api=gl%3D4.0
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,10 +56,12 @@ static
 int open_gl(void) {
 #ifndef IS_UWP
     libGL = LoadLibraryW(L"opengl32.dll");
+
     if(libGL != NULL) {
         void (* tmp)(void);
         tmp = (void(*)(void)) GetProcAddress(libGL, "wglGetProcAddress");
         gladGetProcAddressPtr = (PFNWGLGETPROCADDRESSPROC_PRIVATE) tmp;
+
         return gladGetProcAddressPtr != NULL;
     }
 #endif
