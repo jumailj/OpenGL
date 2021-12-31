@@ -12,14 +12,14 @@ void main()
 
 
 #shader fragment
-
 #version 330 core
 layout (location = 0) out vec4 fgColor;
 in vec4 vertexColor; 
- uniform vec4 ourColor; 
+ uniform vec4 u_Color; 
+
 void main()
 {
-   fgColor = ourColor;
-  //fgColor = vec4(0.7, 0.6, 0.2, 1.0);
+   fgColor = u_Color;
 
 }
+
