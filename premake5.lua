@@ -12,7 +12,10 @@ workspace "OpenGL"
 
 		files{ "%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-		includedirs {"%{prj.name}/vendor/GLFW/include", "%{prj.name}/vendor/GLAD/include"} --include glfw, glad
+		includedirs {"%{prj.name}/vendor/GLFW/include", 
+								 "%{prj.name}/vendor/GLAD/include",
+								 "%{prj.name}/vendor/SPDLOG/include"
+								} --include glfw, glad
 		libdirs{"%{prj.name}/vendor/GLFW/lib"} --include additional lib dependencies
 		links {"opengl32.lib", "glfw3.lib"} --inclding
 
