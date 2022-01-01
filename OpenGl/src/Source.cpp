@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 
 
@@ -187,7 +188,7 @@ int main()
         -0.5f,  0.5f, 0.0f
     };
     */
-    {
+    
         float positions[] = {
             0.5f, 0.5f, 0.0f,
             0.5f,-0.5f, 0.0f,
@@ -202,20 +203,19 @@ int main()
 
 
 
-        unsigned int VAO;
+        // verter buffer);
 
         // vertex array;
-        GLCall(glGenVertexArrays(1, &VAO));
-        GLCall(glBindVertexArray(VAO));
+        VertexBuffer vb(positions, sizeof(float) * 4 * 3);
 
-        // verter buffer);
-        VertexBuffer VB(positions, sizeof(float) * 4 * 3);
+        VertexArray va;
+        VertexBufferLayout layout;
+        layout.Push<float>(3);
+        va.AddBuffer(vb,layout);
 
-        GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
-        GLCall(glEnableVertexAttribArray(0));
 
         // index buffer)
-        IndexBuffer IB(indices, 6);
+        IndexBuffer ib(indices, 6);
 
 
 
@@ -224,16 +224,16 @@ int main()
         unsigned int shader = ShaderCreate(source.vertexShource, source.fragmentSource);
         GLCall(glUseProgram(shader));
 
+ 
+
         int location = glGetUniformLocation(shader, "u_Color");
         ASSERT(location != -1);
 
 
-
-        GLCall(glBindVertexArray(0));
+        va.UnBind();
         GLCall(glUseProgram(0));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
 
 
         float r = 0.0f;
@@ -251,13 +251,15 @@ int main()
             GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 
 
-            GLCall(glBindVertexArray(VAO));
-
-            IB.Bind();
+            
+            va.Bind();
+            ib.Bind();
 
 
             glUniform4f(location, r, 0.3f, 0.8f, 1.0f);
             GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0)); // spcificing index data. (not vertex buffer);
+
+
 
             if (r > 1.0f)
                 increment = -0.05f;
@@ -267,23 +269,17 @@ int main()
             r += increment;
 
 
-
-
             //  float timeValue = glfwGetTime();
             //  float greenValue = sin(timeValue) / 2.0f + 0.5f;
             //  int vertexContolrLocation = glGetUniformLocation(shader, "ourColor");
             //  GLCall(glUniform4f(vertexContolrLocation, 0.3f, greenValue, 0.7f, 1.0f));
-
-
-
 
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
 
 
-        GLCall(glDeleteVertexArrays(1, &VAO));
-        // GLCall(glDeleteBuffers(1, &buffer));
+
         GLCall(glDeleteProgram(shader));
 
 
@@ -291,8 +287,10 @@ int main()
 
         glfwTerminate();
 
-    }
 
+    
+
+    std::cout << " calling exit" << std::endl;
     return 0;
 }
 
