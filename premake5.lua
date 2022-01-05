@@ -10,7 +10,7 @@ workspace "OpenGL"
 		kind "ConsoleApp"
 		language "C++"
 
-		files{ "%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
+		files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
 		includedirs {"%{prj.name}/vendor/GLFW/include", 
 								 "%{prj.name}/vendor/GLAD/include",
