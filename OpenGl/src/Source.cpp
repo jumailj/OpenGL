@@ -7,7 +7,9 @@
 #include <sstream>
 
 #include "Renderer.h"
+
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -15,10 +17,6 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-
-
-
-
 
 
 int main()
@@ -67,42 +65,7 @@ int main()
        //logger::GetCoreLogger()->info("GLAD INIT");
     }
 
-    // build and compile our shader program
-// ------------------------------------
-// vertex shader
-    //unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    //glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    //glCompileShader(vertexShader);
 
-
-    //// fragment shader
-    //unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    //glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    //glCompileShader(fragmentShader);
-
-
-    //// link shaders
-    //unsigned int shaderProgram = glCreateProgram();
-    //glAttachShader(shaderProgram, vertexShader);
-    //glAttachShader(shaderProgram, fragmentShader);
-    //glLinkProgram(shaderProgram);
-
-
-    //glDeleteShader(vertexShader);
-    //glDeleteShader(fragmentShader);
-
-
-    /*
-    float vertices[] = {
-         0.5f,  0.5f, 0.0f, // left
-         0.5f, -0.5f, 0.0f, // right
-        -0.0f,  0.5f, 0.0f,  // top
-         // second triangle
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
-    };
-    */
     
         float positions[] = {
             0.5f, 0.5f, 0.0f,
@@ -118,36 +81,28 @@ int main()
 
 
 
-        // verter buffer);
-
-        // vertex array;
         VertexBuffer vb(positions, sizeof(float) * 4 * 3);
-
         VertexArray va;
 
         VertexBufferLayout layout;
         layout.Push<float>(3);
 
+
         va.AddBuffer(vb,layout);
-
-
-        // index buffer)
         IndexBuffer ib(indices, 6);
 
 
         Shader shader("res/shaders/Basic.shader");
-        shader.Bind();
         shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-
 
 
         va.UnBind();
         shader.UnBind();
-
         vb.UnBind();
-        vb.UnBind();
+        ib.UnBind();
 
 
+        Renderer renderer;
 
         float r = 0.0f;
         float increment = 0.05f;
@@ -157,21 +112,11 @@ int main()
         {
             processInput(window);
 
-            GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
-
+            renderer.Clear();
             shader.Bind();
             shader.SetUniform4f("u_Color", r , 0.3f, 0.3f, 1.0f);
-
-  
-            va.Bind();
-            ib.Bind();
-            
-
-
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0)); // spcificing index data. (not vertex buffer);
-
-
+       
+            renderer.Draw(va,ib,shader);
 
             if (r > 1.0f)
                 increment = -0.05f;
@@ -181,11 +126,6 @@ int main()
             r += increment;
 
 
-            //  float timeValue = glfwGetTime();
-            //  float greenValue = sin(timeValue) / 2.0f + 0.5f;
-            //  int vertexContolrLocation = glGetUniformLocation(shader, "ourColor");
-            //  GLCall(glUniform4f(vertexContolrLocation, 0.3f, greenValue, 0.7f, 1.0f));
-
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
@@ -194,8 +134,6 @@ int main()
         glfwDestroyWindow(window);
         glfwTerminate();
 
-
-    std::cout << " calling exit" << std::endl;
     return 0;
 }
 
